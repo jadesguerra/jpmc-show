@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import com.jpmc.show.exceptions.BusinessException;
 import com.jpmc.show.models.Seat;
 import com.jpmc.show.models.Show;
 import com.jpmc.show.models.Ticket;
@@ -25,8 +26,12 @@ public class ShowService {
 		return instance;
 	}
 	
-	public void setupShow(Show show) {
-		this.showRepository.add(show);
+	public void setupShow(Show show) throws BusinessException {
+		if (this.showRepository.getById(show.getShowNumber()) == null) {
+			this.showRepository.add(show);
+		} else {
+			throw new BusinessException("Error: Show " + show.getShowNumber() + " already exists.");
+		}
 	}
 	
 	public Show viewShow(int id) {

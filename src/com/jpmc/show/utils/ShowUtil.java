@@ -13,10 +13,18 @@ public class ShowUtil {
 	}
 
 	public static ViewShowRequest buildViewShowRequest(String input) {
-		String[] inputTokens = input.split(" ");
-		int showNumber = Integer.valueOf(inputTokens[1]);
-		
-		ViewShowRequest viewShowRequest = new ViewShowRequest(showNumber);
-		return viewShowRequest;
+		try {
+			String[] inputTokens = input.split(" ");
+			if (inputTokens.length != 2) { // expecting only 5 tokens
+				throw new IllegalArgumentException(Constants.INVALID_INPUT_FORMAT_MSG);
+			}
+			int showNumber = Integer.valueOf(inputTokens[1]);
+			
+			ViewShowRequest viewShowRequest = new ViewShowRequest(showNumber);
+			return viewShowRequest;
+		} catch (NumberFormatException e) {
+			// Catches decimal values
+			throw new NumberFormatException("Error: Invalid input. Expecting number " + e.getMessage());
+		}
 	}
 }

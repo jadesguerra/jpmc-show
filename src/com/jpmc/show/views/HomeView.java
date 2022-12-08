@@ -30,18 +30,20 @@ public class HomeView implements View {
 					AdminView adminView = new AdminView(in);
 					adminView.goToAdminView();
 				}
-				printViewHeader();
+			} else {
+				System.out.println("Error: Invalid input");
 			}
+			printViewHeader();
 		}
 	}
 	
 	@Override
 	public void printViewHeader() {
-		System.out.println("----------------------------------");
+		System.out.println("------------------------------------------------------");
 		System.out.println();
-		System.out.println("       WELCOME TO THE SHOWS       ");
+		System.out.println("                 WELCOME TO THE SHOWS                 ");
 		System.out.println();
-		System.out.println("----------------------------------");
+		System.out.println("------------------------------------------------------");
 
 		System.out.println("** Input '0' anytime to return to previous screen");
 		System.out.println("** Input '-1' anytime to exit the program");
@@ -51,7 +53,7 @@ public class HomeView implements View {
 		System.out.println("Use System as:");
 		System.out.println("	[1] Buyer");
 		System.out.println("	[2] Admin");
-		System.out.print("Your input: ");
+		System.out.print("-->> ");
 	}
 	
 	private boolean validHomeInput(String input) {

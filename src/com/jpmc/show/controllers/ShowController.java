@@ -3,6 +3,7 @@ package com.jpmc.show.controllers;
 import java.util.List;
 import java.util.Map;
 
+import com.jpmc.show.exceptions.BusinessException;
 import com.jpmc.show.models.Seat;
 import com.jpmc.show.models.Show;
 import com.jpmc.show.models.Ticket;
@@ -39,7 +40,7 @@ public class ShowController {
 	*	9. NaN
 	*	10. doubles
 	*/
-	public void setupShow(SetupShowRequest setupShowRequest) {
+	public void setupShow(SetupShowRequest setupShowRequest) throws BusinessException {
 		ShowBuilder showBuilder = new ShowBuilder();
 		showBuilder.setShowNumber(setupShowRequest.getShowNumber());
 		showBuilder.setNumOfRows(setupShowRequest.getNumOfRows());
@@ -50,8 +51,11 @@ public class ShowController {
 		this.showService.setupShow(show);
 	}
 	
-	public ViewShowResponse viewShow(ViewShowRequest viewShowRequest) {
+	public ViewShowResponse viewShow(ViewShowRequest viewShowRequest) throws BusinessException {
 		Show show = this.showService.viewShow(viewShowRequest.getShowNum());
+		if (show == null) {
+			throw new BusinessException("Error: Show " + viewShowRequest.getShowNum() + " does not exist.");
+		}
 		List<Ticket> tickets = this.showService.getTicketsForShow(show.getShowNumber());
 		
 		ViewShowResponse viewShowResponse = new ViewShowResponse();
