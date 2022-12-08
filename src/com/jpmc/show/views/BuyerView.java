@@ -42,6 +42,8 @@ public class BuyerView implements View {
 					book(currentInput);
 				} else if (currentInput.toLowerCase().startsWith("cancel")) {
 					cancel(currentInput);
+				} else {
+					System.out.println("Error: Invalid input");
 				}
 				printViewHeader();
 			}
@@ -63,8 +65,8 @@ public class BuyerView implements View {
 			this.showController.cancelTicket(cancelTicketRequest);
 			
 			System.out.println("SUCCESS! Cancelled Ticket " + cancelTicketRequest.getTicketNumber());
-		} catch (Exception e) {
-			
+		} catch (BusinessException e) {
+			System.out.println(e.getMessage());
 		}
 	}
 	
@@ -93,47 +95,71 @@ public class BuyerView implements View {
 			
 			Map<String, Seat> availableSeats = showController.viewAvailibility(viewShowRequest);
 			
-			StringBuilder sb = new StringBuilder();
-			int seatCounter = 0; // for knowing when to do next line
-			for (Map.Entry<String, Seat> entry : availableSeats.entrySet()) {
-				if (seatCounter % 10 == 0) {
-					sb.append("\n");
+			if (availableSeats.isEmpty()) {
+				System.out.println("There are no available seats for Show " + viewShowRequest.getShowNum());
+			} else {
+				StringBuilder sb = new StringBuilder();
+				int seatCounter = 0; // for knowing when to do next line
+				for (Map.Entry<String, Seat> entry : availableSeats.entrySet()) {
+					if (seatCounter % 10 == 0) {
+						sb.append("\n");
+					}
+					sb.append(entry.getValue().getSeatId() + ", ");
+					seatCounter++;
 				}
-				sb.append(entry.getValue().getSeatId() + ", ");
-				seatCounter++;
+				System.out.println(sb.toString());
 			}
-			System.out.println(sb.toString());
-		} catch (Exception e) {
-			
+		} catch (BusinessException e) {
+			System.out.println(e.getMessage());
 		}
 	}
 	
 	private CancelTicketRequest buildCancelTicketRequest(String input) {
 		// Cancel  <Ticket#>  <Phone#>
-		String[] inputTokens = input.split(" ");
-		int ticketNumber = Integer.valueOf(inputTokens[1]);
-		int phoneNumber = Integer.valueOf(inputTokens[2]);
-		
 		CancelTicketRequest cancelTicketRequest = new CancelTicketRequest();
-		cancelTicketRequest.setTicketNumber(ticketNumber);
-		cancelTicketRequest.setPhoneNumber(phoneNumber);
+		try {
+			String[] inputTokens = input.split(" ");
+			if (inputTokens.length != 3) { // expecting only 3 tokens
+				throw new IllegalArgumentException("Error: Invalid input. Try this format: Cancel  <Ticket#>  <Phone#>");
+			}
+			int ticketNumber = Integer.valueOf(inputTokens[1]);
+			int phoneNumber = Integer.valueOf(inputTokens[2]);
+			
+			cancelTicketRequest.setTicketNumber(ticketNumber);
+			cancelTicketRequest.setPhoneNumber(phoneNumber);
+		} catch (NumberFormatException e) {
+			// Catches decimal values
+			throw new NumberFormatException("Error: Invalid input. Expecting number " + e.getMessage());
+		} catch (IllegalArgumentException e) {
+			throw e;
+		}
 		
 		return cancelTicketRequest;
 	}
 
 	private BookShowRequest buildBookShowRequest(String input) {
-		// Book  <Show Number> <Phone#> <Comma separated list of seats> 
-		String[] inputTokens = input.split(" ");
-		int showNumber = Integer.valueOf(inputTokens[1]);
-		int phoneNumber = Integer.valueOf(inputTokens[2]);
-		String seats = inputTokens[3];
-		
-		List<String> seatsList = Arrays.asList(seats.split(","));
-		
+		// Book <Show Number> <Phone#> <Comma separated list of seats> 
 		BookShowRequest bookShowRequest = new BookShowRequest();
-		bookShowRequest.setShowNumber(showNumber);
-		bookShowRequest.setPhoneNumber(phoneNumber);
-		bookShowRequest.setSeats(seatsList);
+		try {
+			String[] inputTokens = input.split(" ");
+			if (inputTokens.length != 4) { // expecting only 4 tokens
+				throw new IllegalArgumentException("Error: Invalid input. Try this format: Book <Show Number> <Phone#> <Comma separated list of seats>");
+			}
+			int showNumber = Integer.valueOf(inputTokens[1]);
+			int phoneNumber = Integer.valueOf(inputTokens[2]);
+			String seats = inputTokens[3];
+			
+			List<String> seatsList = Arrays.asList(seats.split(","));
+			
+			bookShowRequest.setShowNumber(showNumber);
+			bookShowRequest.setPhoneNumber(phoneNumber);
+			bookShowRequest.setSeats(seatsList);
+		} catch (NumberFormatException e) {
+			// Catches decimal values
+			throw new NumberFormatException("Error: Invalid input. Expecting number " + e.getMessage());
+		} catch (IllegalArgumentException e) {
+			throw e;
+		}
 		
 		return bookShowRequest;
 	}

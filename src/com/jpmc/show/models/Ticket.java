@@ -1,5 +1,6 @@
 package com.jpmc.show.models;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 public class Ticket {
@@ -9,6 +10,7 @@ public class Ticket {
 	private int buyerPhoneNumber;
 	private List<String> seats;
 	private boolean isActive;
+	private LocalDateTime cancellationWindow;
 	
 	public int getTicketNumber() {
 		return ticketNumber;
@@ -39,6 +41,12 @@ public class Ticket {
 	}
 	public void setActive(boolean isActive) {
 		this.isActive = isActive;
+	}
+	public LocalDateTime getCancellationWindow() {
+		return cancellationWindow;
+	}
+	public void setCancellationWindow(LocalDateTime cancellationWindow) {
+		this.cancellationWindow = cancellationWindow;
 	}
 	
 	public String seatsToString() {

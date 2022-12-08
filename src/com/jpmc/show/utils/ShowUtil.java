@@ -15,8 +15,8 @@ public class ShowUtil {
 	public static ViewShowRequest buildViewShowRequest(String input) {
 		try {
 			String[] inputTokens = input.split(" ");
-			if (inputTokens.length != 2) { // expecting only 5 tokens
-				throw new IllegalArgumentException(Constants.INVALID_INPUT_FORMAT_MSG);
+			if (inputTokens.length != 2) { // expecting only 2 tokens
+				throw new IllegalArgumentException("Error: Invalid Input. Try this format: View <Show Number> ");
 			}
 			int showNumber = Integer.valueOf(inputTokens[1]);
 			

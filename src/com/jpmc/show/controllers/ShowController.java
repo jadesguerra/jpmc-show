@@ -65,7 +65,7 @@ public class ShowController {
 		return viewShowResponse;
 	}
 	
-	public Map<String, Seat> viewAvailibility(ViewShowRequest viewShowRequest) {
+	public Map<String, Seat> viewAvailibility(ViewShowRequest viewShowRequest) throws BusinessException {
 		Map<String, Seat> availableSeats = this.showService.viewAvailability(viewShowRequest.getShowNum());
 		return availableSeats;
 	}
@@ -79,7 +79,11 @@ public class ShowController {
 	// TODO: validations
 	// 	1. no ticket number
 	//	2. phone number does not match?
-	public void cancelTicket(CancelTicketRequest cancelTicketRequest) {
-		this.showService.cancelTicket(cancelTicketRequest.getTicketNumber());
+	public void cancelTicket(CancelTicketRequest cancelTicketRequest) throws BusinessException {
+		try {
+			this.showService.cancelTicket(cancelTicketRequest.getTicketNumber());
+		} catch (BusinessException e) {
+			throw e;
+		}
 	}
 }

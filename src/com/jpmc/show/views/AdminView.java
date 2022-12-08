@@ -8,7 +8,6 @@ import com.jpmc.show.models.Ticket;
 import com.jpmc.show.requests.SetupShowRequest;
 import com.jpmc.show.requests.ViewShowRequest;
 import com.jpmc.show.responses.ViewShowResponse;
-import com.jpmc.show.utils.Constants;
 import com.jpmc.show.utils.ShowUtil;
 
 public class AdminView implements View {
@@ -39,7 +38,7 @@ public class AdminView implements View {
 			} else if (currentInput.toLowerCase().startsWith("view")) {
 				viewShow(currentInput);
 			} else {
-				System.out.println(Constants.INVALID_INPUT_FORMAT_MSG);
+				System.out.println("Error: Invalid input");
 			}
 			printViewHeader();
 		}
@@ -95,7 +94,7 @@ public class AdminView implements View {
 			String[] inputTokens = input.split(" ");
 			
 			if (inputTokens.length != 5) { // expecting only 5 tokens
-				throw new IllegalArgumentException(Constants.INVALID_INPUT_FORMAT_MSG);
+				throw new IllegalArgumentException("Error: Invalid input. Try this format: Setup <Show Number> <Number of Rows> <Number of seats per row> <Cancellation window in minutes>");
 			}
 			int showNumber = Integer.valueOf(inputTokens[1]);
 			int numOfRows = Integer.valueOf(inputTokens[2]);

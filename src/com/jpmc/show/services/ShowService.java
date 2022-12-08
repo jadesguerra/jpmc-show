@@ -1,5 +1,6 @@
 package com.jpmc.show.services;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.stream.Collectors;
@@ -34,14 +35,17 @@ public class ShowService {
 		}
 	}
 	
-	public Show viewShow(int id) {
-		Show show = this.showRepository.getById(id);
+	public Show viewShow(int showNumber) {
+		Show show = this.showRepository.getById(showNumber);
 		
 		return show;
 	}
 	
-	public Map<String, Seat> viewAvailability(int showNumber) {
+	public Map<String, Seat> viewAvailability(int showNumber) throws BusinessException {
 		Show show = viewShow(showNumber);
+		if (show == null) {
+			throw new BusinessException("Error: Show " + showNumber + " does not exist");
+		}
 		Map<String, Seat> seats = show.getSeats();
 		Map<String, Seat> availableSeats = seats.entrySet()
 			.stream()
@@ -58,6 +62,9 @@ public class ShowService {
 		}
 		// update seats for show
 		Show show = viewShow(showNumber);
+		if (show == null) {
+			throw new BusinessException("Error: Show " + showNumber + " does not exist");
+		}
 		Map<String, Seat> showSeats = show.getSeats();
 		
 		for(String seatId : seats) {
@@ -73,6 +80,10 @@ public class ShowService {
 		ticket.setSeats(seats);
 		ticket.setActive(true);
 		
+		LocalDateTime cancellationDeadline = LocalDateTime.now();
+		cancellationDeadline.plusMinutes(show.getCancellationWindowMins());
+		ticket.setCancellationWindow(cancellationDeadline);
+		
 		// add ticket to ticketRepo
 		this.ticketRepository.add(ticket);
 		
@@ -83,10 +94,16 @@ public class ShowService {
 		return ticket;
 	}
 	
-	// TODO: check dates
-	public void cancelTicket(int ticketNumber) {
+	public void cancelTicket(int ticketNumber) throws BusinessException {
 		// retrieve ticket
 		Ticket ticket = this.ticketRepository.getById(ticketNumber);
+		if (ticket == null) {
+			throw new BusinessException("Error: Ticket " + ticketNumber + " does not exist");
+		}
+		if (LocalDateTime.now().isAfter(ticket.getCancellationWindow())) {
+			throw new BusinessException("Error: Cancellation window for Ticket " + ticketNumber + " has expired");
+		}
+		
 		ticket.setActive(false);
 		int showNumber = ticket.getShowNumber();
 		List<String> seats = ticket.getSeats();
