@@ -6,6 +6,7 @@ import java.util.Map;
 import java.util.Scanner;
 
 import com.jpmc.show.controllers.ShowController;
+import com.jpmc.show.exceptions.BusinessException;
 import com.jpmc.show.models.Seat;
 import com.jpmc.show.models.Ticket;
 import com.jpmc.show.requests.BookShowRequest;
@@ -77,8 +78,8 @@ public class BuyerView implements View {
 			Ticket ticket = this.showController.bookShow(bookShowRequest);
 
 			System.out.println("SUCCESS! Booked for Show " + ticket.getShowNumber() + ", Ticket " + ticket.getTicketNumber());
-		} catch (Exception e) {
-			
+		} catch (BusinessException e) {
+			System.out.println(e.getMessage());
 		}
 	}
 	

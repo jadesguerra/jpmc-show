@@ -43,6 +43,15 @@ public class TicketRepository implements Repository<Ticket> {
 				.collect(Collectors.toList());
 		return activeTicketsForShow;
 	}
+	
+	public List<Ticket> getActiveTicketsForShowByPhoneNumber(int showNumber, int phoneNumber) {
+		List<Ticket> activeTicketsForShow = this.getActiveTicketsForShow(showNumber);
+		List<Ticket> ticketsByPhoneNumber = activeTicketsForShow
+				.stream()
+				.filter(ticket -> ticket.getBuyerPhoneNumber() == phoneNumber)
+				.collect(Collectors.toList());
+		return ticketsByPhoneNumber;
+	}
 
 	public Map<Integer, Ticket> getAll() {
 		return tickets;

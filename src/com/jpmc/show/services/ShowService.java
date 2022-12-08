@@ -51,7 +51,11 @@ public class ShowService {
 		return availableSeats;
 	}
 	
-	public Ticket bookShow(int showNumber, int phoneNumber, List<String> seats) {
+	public Ticket bookShow(int showNumber, int phoneNumber, List<String> seats) throws BusinessException {
+		// check if booking already exists for phoneNumber
+		if (!this.ticketRepository.getActiveTicketsForShowByPhoneNumber(showNumber, phoneNumber).isEmpty()) {
+			throw new BusinessException("Error: Only one booking allowed per Buyer per Show");
+		}
 		// update seats for show
 		Show show = viewShow(showNumber);
 		Map<String, Seat> showSeats = show.getSeats();

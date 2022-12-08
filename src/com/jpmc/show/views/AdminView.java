@@ -106,6 +106,8 @@ public class AdminView implements View {
 			setupShowRequest.setNumOfRows(numOfRows);
 			setupShowRequest.setNumOfSeats(numOfSeats);
 			setupShowRequest.setCancellationMins(cancellationMins);
+			
+			validateSetupShowRequest(setupShowRequest);
 		} catch (NumberFormatException e) {
 			// Catches decimal values
 			throw new NumberFormatException("Error: Invalid input. Expecting number " + e.getMessage());
@@ -114,5 +116,17 @@ public class AdminView implements View {
 		}
 		
 		return setupShowRequest;
+	}
+	
+	private void validateSetupShowRequest(SetupShowRequest setupShowRequest) throws IllegalArgumentException {
+		int numOfRows = setupShowRequest.getNumOfRows();
+		if (numOfRows < 1 || numOfRows > 26) {
+			throw new IllegalArgumentException("Error: Number of rows must be between 1 and 26");
+		}
+		
+		int numOfSeats = setupShowRequest.getNumOfSeats();
+		if (numOfSeats < 1 || numOfSeats > 10) {
+			throw new IllegalArgumentException("Error: Number of seats must between 1 and 10");
+		}
 	}
 }

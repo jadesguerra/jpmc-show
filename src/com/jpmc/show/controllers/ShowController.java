@@ -70,7 +70,7 @@ public class ShowController {
 		return availableSeats;
 	}
 	
-	public Ticket bookShow(BookShowRequest bookShowRequest) {
+	public Ticket bookShow(BookShowRequest bookShowRequest) throws BusinessException {
 		Ticket ticket = this.showService.bookShow(bookShowRequest.getShowNumber(), bookShowRequest.getPhoneNumber(), bookShowRequest.getSeats());
 		
 		return ticket;
