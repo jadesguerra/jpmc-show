@@ -69,6 +69,10 @@ public class ShowService {
 		
 		for(String seatId : seats) {
 			// TODO: handle if seats are already taken. Maybe store original seats as fallback?
+			Seat showSeat = showSeats.get(seatId);
+			if (showSeat == null || showSeat.isReserved()) {
+				throw new BusinessException("Error: No Seat " + seatId + " available for Show " + showNumber);
+			}
 			showSeats.get(seatId).setReserved(true);
 		}
 		this.showRepository.add(show);

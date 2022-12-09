@@ -32,7 +32,6 @@ public class BuyerView implements View {
 			
 			ShowUtil.checkExitCommand(currentInput);
 			
-			//TODO: validate buyer command
 			if (true) {
 				if (currentInput.equals("0")) {
 					return;
@@ -55,7 +54,7 @@ public class BuyerView implements View {
 		System.out.println();
 		System.out.println("------------------------------");
 		System.out.println("Hello buyer.");
-		System.out.print  ("	Your Command: ");
+		System.out.print  ("-->> ");
 	}
 
 	private void cancel(String input) {
@@ -65,30 +64,31 @@ public class BuyerView implements View {
 			this.showController.cancelTicket(cancelTicketRequest);
 			
 			System.out.println("SUCCESS! Cancelled Ticket " + cancelTicketRequest.getTicketNumber());
+		} catch (NumberFormatException e) {
+			// Catches decimal values
+			System.out.println(e.getMessage());
+		} catch (IllegalArgumentException e) {
+			System.out.println(e.getMessage());
 		} catch (BusinessException e) {
 			System.out.println(e.getMessage());
 		}
 	}
 	
-	// TODO: test cases
-	// 	1. no availability
-	//	2. no show number
-	//	3. validate input
 	private void book(String input) {
 		try {
 			BookShowRequest bookShowRequest = buildBookShowRequest(input);
 			Ticket ticket = this.showController.bookShow(bookShowRequest);
 
 			System.out.println("SUCCESS! Booked for Show " + ticket.getShowNumber() + ", Ticket " + ticket.getTicketNumber());
+		} catch (NumberFormatException e) {
+			System.out.println(e.getMessage());
+		} catch (IllegalArgumentException e) {
+			System.out.println(e.getMessage());
 		} catch (BusinessException e) {
 			System.out.println(e.getMessage());
 		}
 	}
 	
-	// TODO: test cases
-	// 	1. no availability
-	//	2. no show number
-	//	3. validate input
 	private void viewAvailability(String input) {
 		try {
 			ViewShowRequest viewShowRequest = ShowUtil.buildViewShowRequest(input);
@@ -109,18 +109,23 @@ public class BuyerView implements View {
 				}
 				System.out.println(sb.toString());
 			}
+		} catch (NumberFormatException e) {
+			// Catches decimal values
+			System.out.println(e.getMessage());
+		} catch (IllegalArgumentException e) {
+			System.out.println("Error: Invalid input. Try this format: Availability <Show Number>");
 		} catch (BusinessException e) {
 			System.out.println(e.getMessage());
 		}
 	}
 	
-	private CancelTicketRequest buildCancelTicketRequest(String input) {
+	private CancelTicketRequest buildCancelTicketRequest(String input) throws NumberFormatException, IllegalArgumentException {
 		// Cancel  <Ticket#>  <Phone#>
 		CancelTicketRequest cancelTicketRequest = new CancelTicketRequest();
 		try {
 			String[] inputTokens = input.split(" ");
 			if (inputTokens.length != 3) { // expecting only 3 tokens
-				throw new IllegalArgumentException("Error: Invalid input. Try this format: Cancel  <Ticket#>  <Phone#>");
+				throw new IllegalArgumentException("Error: Invalid input. Try this format: Cancel <Ticket#> <Phone#>");
 			}
 			int ticketNumber = Integer.valueOf(inputTokens[1]);
 			int phoneNumber = Integer.valueOf(inputTokens[2]);
@@ -137,7 +142,7 @@ public class BuyerView implements View {
 		return cancelTicketRequest;
 	}
 
-	private BookShowRequest buildBookShowRequest(String input) {
+	private BookShowRequest buildBookShowRequest(String input) throws NumberFormatException, IllegalArgumentException {
 		// Book <Show Number> <Phone#> <Comma separated list of seats> 
 		BookShowRequest bookShowRequest = new BookShowRequest();
 		try {

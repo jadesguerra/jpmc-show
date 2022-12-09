@@ -77,8 +77,7 @@ public class ShowController {
 	}
 	
 	// TODO: validations
-	// 	1. no ticket number
-	//	2. phone number does not match?
+	//	1. phone number does not match?
 	public void cancelTicket(CancelTicketRequest cancelTicketRequest) throws BusinessException {
 		try {
 			this.showService.cancelTicket(cancelTicketRequest.getTicketNumber());

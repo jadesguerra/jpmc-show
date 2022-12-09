@@ -1,22 +1,19 @@
 Simple SHOW APPLICATION
 
 How to run: <br>
-	- Run ShowApplicationRunner.java as Java Application
+&nbsp;&nbsp;- Run ShowApplicationRunner.java as Java Application <br>
 
 Assumptions: <br>
-	- Phone number only accepts numbers (no spaces, '+', etc)
+&nbsp;&nbsp;- Phone number only accepts numbers (no spaces, '+', etc) <br>
 
 Known issues: <br>
-	- No validation in backend layers
-	- No checking for one booking per phone number per show
-	- No checking if seats are already taken when booking
-	- No checking if seats exist when booking
-	- No checking if phoneNumber matches when cancelling
-	- Spaces before command keyword are invalidated
+&nbsp;&nbsp;- No checking if phoneNumber matches when cancelling <br>
+&nbsp;&nbsp;- No rollback when booking multiple seats
+&nbsp;&nbsp;- Spaces before command keyword are invalidated <br>
 	
 To do / For future improvements: <br>
-	- Automated unit testing
-	- Better UI messages
-		- Display options for Buyers and Admins
-	- Login for Admin
-	- Max length for inputs
+&nbsp;&nbsp;- Automated unit testing <br>
+&nbsp;&nbsp;- Better UI messages <br>
+&nbsp;&nbsp;&nbsp;&nbsp;- Display options for Buyers and Admins <br>
+&nbsp;&nbsp;- Login for Admin <br>
+&nbsp;&nbsp;- Max length for inputs <br>

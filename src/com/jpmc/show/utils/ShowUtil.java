@@ -12,7 +12,7 @@ public class ShowUtil {
 		}
 	}
 
-	public static ViewShowRequest buildViewShowRequest(String input) {
+	public static ViewShowRequest buildViewShowRequest(String input) throws IllegalArgumentException, NumberFormatException {
 		try {
 			String[] inputTokens = input.split(" ");
 			if (inputTokens.length != 2) { // expecting only 2 tokens
